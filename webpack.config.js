@@ -13,6 +13,7 @@ module.exports = {
             // lib alias
             "@lib": path.join(cwd, "./lib"),
             "@utils": path.join(cwd, "./lib/utils"),
+            "@helpers": path.join(cwd, "./lib/utils.ts"),
             "@components": path.join(cwd, "./lib/components"),
             // source alias
             "@root": path.join(cwd, "./src"),

@@ -1,21 +1,43 @@
 {
-    "compilerOptions": {
-      "outDir": "./dist/",
-      "noImplicitAny": true,
-      "module": "es6",
-      "target": "es5",
-      "allowJs": true,
-      "moduleResolution": "node",
-      "baseUrl": "./",
-      "paths": {
-          "@lib/*": [ "./lib/*" ],
-          "@utils": [ "./lib/utils/*" ],
-          "@components": [ "./lib/components/*" ],
-          "@root": [ "./src/*" ],
-          "@assets": [ "./src/assets/*" ],
-          "@config": [ "./src/config/*" ],
-          "@entities": [ "./src/entities/*" ],
-          "@screens": [ "./src/screens/*" ],
-      }
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@lib/*": [
+        "./lib/*"
+      ],
+      "@utils/*": [
+        "./lib/utils/*"
+      ],
+      "@helpers": [
+        "./lib/helpers.ts"
+      ],
+      "@components/*": [
+        "./lib/components/*"
+      ],
+      "@root/*": [
+        "./src/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@entities/*": [
+        "./src/entities/*"
+      ],
+      "@screens/*": [
+        "./src/screens/*"
+      ]
     }
   }
+}
