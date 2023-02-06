@@ -15,7 +15,7 @@ abstract class AbstractAudio {
     static on() {
         this._on = true
     }
-    static loadResource: (url: string) => void = () => {}
+    static loadResource: (url: string) => Promise<void> = async () => { return Promise.resolve() }
     static destroy(soundObj: AbstractAudio) { 
         this.onDestroyed(soundObj)
     }

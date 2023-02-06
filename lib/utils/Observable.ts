@@ -1,10 +1,8 @@
-type props = {
-    [key: string]: any
-}
+import { isNull } from "./core"
+
+type props = Record<string, any>
 type callback = (...params: any[]) => void
-type events = {
-    [key: string]: callback[]
-} 
+type events = Record<string, callback[]>
 class Observable {
     private events: events = {}
     private oneOffs: callback[] = []
@@ -26,8 +24,8 @@ class Observable {
         this.oneOffs.push(callback)
         this.on(eventName, callback)
     }
-    off(eventName: string, callback: callback | undefined) {
-        if (typeof callback === "undefined") {
+    off(eventName: string, callback?: callback) {
+        if (isNull(callback)) {
             this.events[eventName] = []
             return
         }
