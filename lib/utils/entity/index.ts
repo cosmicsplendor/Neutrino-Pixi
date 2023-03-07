@@ -86,7 +86,7 @@ export function calcAligned(c, e, x, y, mX=0, mY=0) {
     const pos = getReusableCoords(mX, mY)
     switch (x) {
         case "left":
-            pos.x += sc.il(c, e)
+            pos.x += sc.il(c)
         break
         case "center":
             pos.x += sc.hc(c, e)
@@ -99,7 +99,7 @@ export function calcAligned(c, e, x, y, mX=0, mY=0) {
     }
     switch(y) {
         case "top":
-            pos.y += sc.it(c, e)
+            pos.y += sc.it(c)
         break
         case "center":
             pos.y += sc.vc(c, e)
@@ -124,7 +124,7 @@ export function calcStacked(e1, e2, dir, mX=0, mY=0) {
     const pos = getReusableCoords(mX, mY)
     switch(dir) {
         case "top-start":
-            pos.x += sc.il(e1, e2)
+            pos.x += sc.il(e1)
             pos.y += sc.ot(e1, e2)
         break
         case "top":
@@ -136,32 +136,32 @@ export function calcStacked(e1, e2, dir, mX=0, mY=0) {
             pos.y += sc.ot(e1, e2)
         break
         case "right-start":
-            pos.x += sc.or(e1, e2)
-            pos.y += sc.it(e1, e2)
+            pos.x += sc.or(e1)
+            pos.y += sc.it(e1)
         break
         case "right":
-            pos.x += sc.or(e1, e2)
+            pos.x += sc.or(e1)
             pos.y += sc.vc(e1, e2)
         break
         case "right-end":
-            pos.x += sc.or(e1, e2)
+            pos.x += sc.or(e1)
             pos.y += sc.ib(e1, e2)
         break
         case "bottom-start":
-            pos.x += sc.il(e1, e2)
-            pos.y += sc.ob(e1, e2)
+            pos.x += sc.il(e1)
+            pos.y += sc.ob(e1)
         break
         case "bottom":
             pos.x += sc.hc(e1, e2)
-            pos.y += sc.ob(e1, e2)
+            pos.y += sc.ob(e1)
         break
         case "bottom-end":
             pos.x += sc.ir(e1, e2)
-            pos.y += sc.ob(e1, e2)
+            pos.y += sc.ob(e1)
         break
         case "left-start":
             pos.x += sc.ol(e1, e2)
-            pos.y += sc.it(e1, e2)
+            pos.y += sc.it(e1)
         break
         case "left":
             pos.x += sc.ol(e1, e2)

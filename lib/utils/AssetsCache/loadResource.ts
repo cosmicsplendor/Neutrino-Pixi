@@ -49,9 +49,8 @@ const loadResource = (url: string) => {
 
 export const loadConcurrently = async (urls: Asset[], load: (url: Asset) => Promise<void>, conccurrency = 3) => {
     for (let i = 0; i < urls.length + conccurrency; i += conccurrency) {
-        await Promise.all(
-            urls.slice(i, i + conccurrency).map(load)
-        )
+        const loadPromises = urls.slice(i, i + conccurrency).map(load)
+        await Promise.all(loadPromises)
     }
 }
 

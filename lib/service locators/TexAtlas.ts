@@ -4,9 +4,6 @@ class TexAtlasLocator {
     private static texAtlas: TexAtlas
     private static registered = false
     static register(texAtlas: TexAtlas) {
-        if (this.registered) {
-            throw new Error("Texture Atlas can only be registered once")
-        }
         this.texAtlas = texAtlas
         this.registered = true
     }

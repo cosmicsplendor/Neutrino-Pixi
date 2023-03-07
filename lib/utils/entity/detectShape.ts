@@ -5,7 +5,7 @@ export const shapes = Object.freeze({
 })
 export default (entity: { hitCirc?: any, hitbox?: any, width?: number, height?: number }) => {
     const shape = entity.hitCirc ? shapes.CIRC: shapes.RECT
-    if (shape === shapes.RECT && !entity.hitbox && !entity.width & !entity.height) {
+    if (shape === shapes.RECT && !entity.hitbox && !entity.width && !entity.height) {
         throw new Error(`Unable to determine entity shape: \n${JSON.stringify(entity, null, 3)}`)
     }
     return shape

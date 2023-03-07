@@ -1,5 +1,6 @@
 import { Texture, BaseTexture, Sprite, Rectangle } from "pixi.js";
 import TextureAtlasLocator from "@lib/service locators/TexAtlas"
+import { NodeMixin } from "./Node";
 
 export type AtlasFrameData = {
     x: number,
@@ -16,9 +17,10 @@ export class TexAtlas {
     private dict: Record<string, Texture> = { }
     constructor(private baseTex: BaseTexture, private data: AtlasData) {
         Object.entries(this.data).forEach(([ frameName, frameData ]) => {
-            const { x, y, width, height } = frameData
+            const { x, y, width, height, rotation } = frameData
+            const dims = rotation === 90 ? [height, width]: [width, height]
             const texture = new Texture(this.baseTex)
-            texture.frame = new Rectangle(x, y, width, height)
+            texture.frame = new Rectangle(x, y, dims[0], dims[1])
             this.dict[frameName] = texture
         })
     }
@@ -30,9 +32,11 @@ export class TexAtlas {
     }
 }
 
-class TexRegion extends Sprite {
+class TexRegion extends NodeMixin(Sprite) {
     constructor(frame: string) {
-        const texture = TextureAtlasLocator.locate().get(frame)
+        const texture = TextureAtlasLocator
+            .locate()
+            .get(frame)
         super(texture)
     }
 }

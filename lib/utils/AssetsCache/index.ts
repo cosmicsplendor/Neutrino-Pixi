@@ -21,7 +21,9 @@ class AssetLoader extends Observable { // static class
                 this.emit("error", e.message ?? e)
             }
         }
-        loadConcurrently(assets, load, concurrency)
+        await loadConcurrently(assets, load, concurrency)
+        this.emit("load")
+        this.emit("prog-end")
     }
     unload(url: string) {
         if (inferType(url) === "image") {
