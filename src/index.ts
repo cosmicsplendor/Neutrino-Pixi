@@ -6,6 +6,7 @@ import atlasImg from "@assets/texAtlas/image.png"
 import TexAtlasLocator from '@lib/service locators/TexAtlas'
 import TexRegion from '@lib/entities/TexRegion'
 import AssetLoader from "@lib/utils/AssetsCache"
+import Viewport from '@lib/utils/Viewport'
 
 const app = new Application({
     view: document.getElementById("arena") as HTMLCanvasElement,
@@ -14,26 +15,34 @@ const app = new Application({
     backgroundColor: 0x6495ed,
     width: window.innerWidth,
     height: window.innerHeight,
-    resizeTo: window
 })
-
+const viewport = new Viewport((width, height) => {
+    return { width, height }
+})
+viewport.on("change", () => {
+    app.renderer.resize(viewport.width, viewport.height)
+})
 class Crane extends TexRegion {
     constructor() {
         super("crane")
     }
     update = dt => {
         this.x += 20 * dt
-        this.y += 30 * dt
+        this.y += 20 * dt
     }
 }
-const executeLoop = (scene) => {
+const startGameLoop = (scene) => {
     let lastT = 0
-    const updateRecursively = (scene, dt: number, t: number) => {
-        scene.descendants.forEach(desc => {
+    const updateRecursively = (node, dt: number, t: number, rootNode=node) => {
+        node.descendants.forEach(desc => {
+            node.visible = typeof rootNode.intersects === "function" ? rootNode.intersects(node): true
             if (typeof desc.update === "function") {
                 desc.update(dt, t)
             }
-            updateRecursively(desc, dt, t)
+            const cachedChildren = node.descendants
+            for (let i = 0, len = cachedChildren.length; i < len; i++) {
+                updateRecursively(cachedChildren[i], dt, t, rootNode)
+            }
         })
     }
     const loop = t => {
@@ -53,6 +62,6 @@ assetLoader.on("prog-end", () => {
     app.stage.addChild(scene)
     const crane = new Crane()
     scene.add(crane)
-    executeLoop(scene)
+    const loopControls = startGameLoop(scene)
 })
 assetLoader.on("error", console.log)

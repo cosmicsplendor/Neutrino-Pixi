@@ -33,7 +33,7 @@ class WebAudio extends AbstractAudio {
         })
     }
     static destroy(soundObj: WebAudio) {
-        WebAudio.onDestroyed(soundObj)
+        WebAudio.emitDestroy(soundObj)
     }
     private buffer: AudioBuffer
     private volumeNode: GainNode
@@ -67,7 +67,7 @@ class WebAudio extends AbstractAudio {
         this.lastPlayedAt = 0 // last time the play method was invoked
         this.playing = false // the sound starts off paused
 
-        WebAudio.onCreated(this)
+        WebAudio.emitCreate(this)
         this.onEnded = () => this.playing = false
     }
     pause() {
@@ -111,11 +111,11 @@ class WebAudio extends AbstractAudio {
     get pan() {
         return this.panNode.pan.value
     }
-    _stop() {
+    private _stop() {
         const { sourceNode } = this
         sourceNode && sourceNode.stop(0)
     }
-    _play(from: number, duration: number) {
+    private _play(from: number, duration: number) {
         const { buffer, panNode, volumeNode, _loop, _speed } = this
         const sourceNode = ctx.createBufferSource()
         this.sourceNode = sourceNode

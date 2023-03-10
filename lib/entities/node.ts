@@ -1,12 +1,7 @@
 // import Observable from "@lib/utils/Observable";
 import { Constructor } from "@lib/utils/types";
-import { Container, Sprite, DisplayObject, Point } from "pixi.js";
+import { Container } from "pixi.js";
 
-// class TextureAtlas extends Observable {
-
-// }
-
-// type Mixin<B> = <I extends B>(BaseClass: Constructor<B>) => Constructor<I>
 export const NodeMixin = function <TBase extends Constructor<Container>>(Base: TBase) {
     return class NodeClass extends Base {
         descendants: NodeClass[] = []
@@ -29,37 +24,6 @@ export const NodeMixin = function <TBase extends Constructor<Container>>(Base: T
 }
 
 const Node = NodeMixin(Container)
-
-
-const updateRecursively = (node: Node, dt: number, t: number, rootNode = node) => {
-    // if (node.movable) {
-    //     node.prevPosX = node.x
-    //     node.prevPosY = node.y
-    //     if (node.unduePosXUpdate) {
-    //         node.x += node.unduePosXUpdate
-    //         node.unduePosXUpdate = 0
-    //     }
-    //     if (node.roll) {
-    //         node.prevRot = node.rotation
-    //     }
-    // }
-    // node._visible = node.alpha === 0 ? false: (rootNode.intersects ? rootNode.intersects(node): true)
-    // ;(node._visible || node.forceUpdate) && node.update && node.update(dt, t)
-    // if (!node.childNodes) { return }
-    const cachedChildren = node.childNodes
-    /**
-     * cached copy of node.childNodes must be kept to ensure the code executes predictably
-     * in case we didn't do so, removal of a childNode (in it's update function) would break this recursion --
-     * when the childNodes iteration reaches the removed childNode's last sibling
-     * that's because the new childNodes array would have lastChildrenLength - 1 length, but the endpoint of the current iteration -- 
-     * would still be lastChildrenLength. So trying access length index of the new childNodes array would result in an undefined value
-     * Here's an interesting fact: this shrinking of childNodes array results in the removed node's next sibling shifting an index backward,
-     * thus occupying the removed node's current position. The next iteration therefore skips over it.
-     */
-    for (let i = 0, len = cachedChildren.length; i < len; i++) {
-        updateRecursively(cachedChildren[i], dt, t, rootNode)
-    }
-}
 
 // const node = new NodeClass()
 // const sprite = new SpriteClass()

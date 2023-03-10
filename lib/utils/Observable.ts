@@ -1,17 +1,15 @@
 import { isNull } from "./core"
 
-type props = Record<string, any>
 type callback = (...params: any[]) => void
 type events = Record<string, callback[]>
 class Observable {
     private events: events = {}
     private oneOffs: callback[] = []
-    constructor(eventNames: string[], props: props = {}) {
+    constructor(eventNames: string[]) {
         this.events = eventNames.reduce((events, event) => {
             events[event] = []
             return events
         }, this.events)
-        Object.assign(this, props)
     }
     on(eventName: string, callback: callback) {
         if (!this.events[eventName]) {
