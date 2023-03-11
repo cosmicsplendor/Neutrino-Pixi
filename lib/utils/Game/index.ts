@@ -3,35 +3,49 @@ import AssetsCache from "../AssetsCache"
 import GameScreen from "@lib/entities/GameScreen"
 import SoundCtrls from "./SoundCtrls"
 import { ReturnType } from "../types"
+import Viewport from "../Viewport"
+import { Application } from "pixi.js"
 
+type UpdateFn = (dt: number, t: number) => void
 type Params = {
     assetsCache: AssetsCache,
     screenFactories: any[],
-    activeScreen: any
+    activeScreen?: string,
+    viewport: Viewport,
+    update?: UpdateFn,
+    pixiApp: Application
 }
 class Game {
     activeScreen: GameScreen
+    private update: UpdateFn
     private _assetsCache: AssetsCache
+    private _viewport: Viewport
     private soundCtrls = new SoundCtrls()
     private loopCtrls: ReturnType<typeof startGameLoop>
+    private app: Application
+    get assetsCache() { return this._assetsCache }
+    get viewport() { return this._viewport }
+    private set assetsCache(assetsCache: AssetsCache) { this._assetsCache = assetsCache }
+    private set viewport(viewport: Viewport) { this._viewport = viewport }
     paused = false
-    constructor({ assetsCache, screenFactories, activeScreen }: Params) {
-        this._assetsCache = assetsCache
-
+    constructor({ assetsCache, screenFactories, activeScreen, viewport, update = () => {}, pixiApp }: Params) {
+        this.assetsCache = assetsCache
+        this.viewport = viewport
+        this.update = update
+        this.app = pixiApp
         const screenNames = Object.keys(screenFactories)
         screenNames.forEach(screenName => {
             const createScreen = screenFactories[screenName]
             this[screenName] = createScreen(this)
             this[screenName].name = screenName
         })
-
-        if (activeScreen) { this.switchScreen(activeScreen) }
+        viewport.on("change", () => {
+            this.app.renderer.resize(viewport.width, viewport.height)
+        })
+        if (typeof activeScreen === "string") { this.switchScreen(activeScreen) }
     }
-    get assetsCache() { return this._assetsCache }
     switchScreen(screenName, ...params) {
-        if (this.activeScreen) {
-            this.activeScreen?.onExit()
-        }
+        this.activeScreen?.onExit()
         this.activeScreen = this[screenName]
         // if (this.activeScreen.background) { this.renderer.changeBackground(this.activeScreen.background) }
         this.activeScreen?.onEnter(...params)
@@ -39,22 +53,11 @@ class Game {
     disposeScreen(screen) {
         this[screen.name] = null
     }
-    _update(dt, t) {
-       if (this.activeScreen.update) {
-           this.activeScreen.update(dt, t)
-       }
-    }
     start() {
         this.loopCtrls = startGameLoop({
-            mainUpdateFn: () => {},
+            mainUpdateFn: this.update,
             game: this
         })
-    }
-    turnOffSound() {
-        this.soundCtrls.off()
-    }
-    turnOnSound() {
-        this.soundCtrls.off()
     }
     pause() {
         if (this.paused) { return }
@@ -73,6 +76,12 @@ class Game {
         this.paused = false
         this.loopCtrls.resume()
         this.soundCtrls.reset()
+    }
+    turnOffSound() {
+        this.soundCtrls.off()
+    }
+    turnOnSound() {
+        this.soundCtrls.off()
     }
 }
 
