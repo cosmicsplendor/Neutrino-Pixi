@@ -1,9 +1,9 @@
 import startGameLoop from "./startGameLoop"
-import AssetsCache from "../AssetsCache"
+import AssetsCache from "@lib/utils/AssetsCache"
 import GameScreen from "@lib/entities/GameScreen"
 import SoundCtrls from "./SoundCtrls"
-import { ReturnType } from "../types"
-import Viewport from "../Viewport"
+import { ReturnType } from "@lib/utils/types"
+import Viewport from "@lib/utils/Viewport"
 import { Application } from "pixi.js"
 
 type UpdateFn = (dt: number, t: number) => void
@@ -47,8 +47,8 @@ class Game {
     switchScreen(screenName, ...params) {
         this.activeScreen?.onExit()
         this.activeScreen = this[screenName]
-        // if (this.activeScreen.background) { this.renderer.changeBackground(this.activeScreen.background) }
-        this.activeScreen?.onEnter(...params)
+        this.activeScreen.onEnter(...params)
+        this.app.stage = this.activeScreen
     }
     disposeScreen(screen) {
         this[screen.name] = null

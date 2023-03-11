@@ -1,5 +1,5 @@
-import Sound from "@utils/sound"
-import AbstractAudio from "../Sound/APIs/AbstractAudio"
+import Sound from "@utils/Sound"
+import AbstractAudio from "@utils/Sound/APIs/AbstractAudio"
 
 class SoundCtrls {
     private sounds: AbstractAudio[] = []
