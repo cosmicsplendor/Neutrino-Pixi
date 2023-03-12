@@ -1,8 +1,8 @@
 import Node from "./Node"
 
-class GameScreen extends Node {
-    onExit?: () => void
-    onEnter?: (...args: any[]) => void
+abstract class GameScreen extends Node {
+    abstract onExit(): void
+    abstract onEnter(...args: any[]): void
 }
 
 export default GameScreen

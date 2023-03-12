@@ -9,7 +9,7 @@ import { Application } from "pixi.js"
 type UpdateFn = (dt: number, t: number) => void
 type Params = {
     assetsCache: AssetsCache,
-    screenFactories: any[],
+    screenFactories: Record<string, (game: Game) => GameScreen>,
     activeScreen?: string,
     viewport: Viewport,
     update?: UpdateFn,
