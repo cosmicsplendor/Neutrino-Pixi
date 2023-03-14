@@ -2,7 +2,7 @@ import { Assets } from "pixi.js"
 import Observable from "../Observable"
 import loadResource, { loadConcurrently, Asset, inferType } from "./loadResource"
 
-class AssetLoader extends Observable { // static class
+class AssetsCache extends Observable { // static class
     private resources: Record<string, unknown> = {}
     constructor() {
         super(["prog", "prog-end", "load", "error"]) // defining a set of supported events
@@ -36,4 +36,4 @@ class AssetLoader extends Observable { // static class
     }
 }
 
-export default AssetLoader
+export default AssetsCache

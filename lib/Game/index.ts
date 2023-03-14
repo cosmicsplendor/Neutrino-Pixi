@@ -8,7 +8,6 @@ import { Application } from "pixi.js"
 
 type UpdateFn = (dt: number, t: number) => void
 type Params = {
-    assetsCache: AssetsCache,
     screenFactories: Record<string, (game: Game) => GameScreen>,
     activeScreen?: string,
     viewport: Viewport,
@@ -28,8 +27,8 @@ class Game {
     private set assetsCache(assetsCache: AssetsCache) { this._assetsCache = assetsCache }
     private set viewport(viewport: Viewport) { this._viewport = viewport }
     paused = false
-    constructor({ assetsCache, screenFactories, activeScreen, viewport, update = () => {}, pixiApp }: Params) {
-        this.assetsCache = assetsCache
+    constructor({ screenFactories, activeScreen, viewport, update = () => {}, pixiApp }: Params) {
+        this.assetsCache = new AssetsCache()
         this.viewport = viewport
         this.update = update
         this.app = pixiApp
@@ -39,9 +38,11 @@ class Game {
             this[screenName] = createScreen(this)
             this[screenName].name = screenName
         })
-        viewport.on("change", () => {
+        const resizeRenderer = () => {
             this.app.renderer.resize(viewport.width, viewport.height)
-        })
+        }
+        viewport.on("change", resizeRenderer)
+        resizeRenderer()
         if (typeof activeScreen === "string") { this.switchScreen(activeScreen) }
     }
     switchScreen(screenName, ...params) {
