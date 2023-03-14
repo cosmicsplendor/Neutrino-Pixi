@@ -4,7 +4,7 @@ type Params = {
     game: Game,
     step?: number
 }
-const updateRecursively = (node, dt: number, t: number, rootNode=node) => {
+export const updateRecursively = (node, dt: number, t: number, rootNode=node) => {
     node.descendants.forEach(desc => {
         node.visible = typeof rootNode.intersects === "function" ? rootNode.intersects(node): true
         if (typeof desc.update === "function") {

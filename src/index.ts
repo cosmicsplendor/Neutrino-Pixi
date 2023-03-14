@@ -8,7 +8,7 @@ import LevelScreen from './screens/Level'
 const app = new Application({
     view: document.getElementById("arena") as HTMLCanvasElement,
     resolution: window.devicePixelRatio || 1,
-    autoDensity: true,
+    autoDensity: true
 })
 const viewport = new Viewport((width, height) => {
     return { width, height }
@@ -21,7 +21,7 @@ const game = new Game({
             return new LoadingScreen({ game })
         },
         [screens.LEVEL]: game => {
-            return new LevelScreen()
+            return new LevelScreen(game)
         }
     }
 })

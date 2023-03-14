@@ -1,14 +1,31 @@
 import TexRegion from "@lib/entities/TexRegion"
-import { Sprite } from "pixi.js"
+import KeyControls from "@lib/Controls/KeyControls"
 
 class Crane extends TexRegion {
+    ctrls: KeyControls
     constructor() {
         super("crane")
-        console.log(this.width)
+        this.ctrls = new KeyControls({
+            left: ["a", "arrowleft"],
+            right: ["d", "arrowright"],
+            up: ["w", "arrowtop"],
+            down: ["s", "arrowdown"]
+        })
     }
     update = dt => {
-        this.x += 20 * dt
-        this.y += 20 * dt
+        if (this.ctrls.get("left")) {
+            this.x -= 100 * dt
+        } else if(this.ctrls.get("right")) {
+            this.x += 100 * dt
+        }
+        
+        if (this.ctrls.get("up")) {
+            this.y -= 100 * dt
+        } else if(this.ctrls.get("down")) {
+            this.y += 100 * dt
+        }
+
+        this.ctrls.resetPressed()
     }
 }
 
