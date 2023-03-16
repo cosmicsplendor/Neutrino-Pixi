@@ -1,10 +1,10 @@
 import TexRegion from "@lib/entities/TexRegion"
 import KeyControls from "@lib/Controls/KeyControls"
 
-class Crane extends TexRegion {
+class Ball extends TexRegion {
     ctrls: KeyControls
     constructor() {
-        super("crane")
+        super("ball")
         this.ctrls = new KeyControls({
             left: ["a", "arrowleft"],
             right: ["d", "arrowright"],
@@ -29,4 +29,4 @@ class Crane extends TexRegion {
     }
 }
 
-export default Crane
+export default Ball
