@@ -1,7 +1,8 @@
 import Node from "./Node"
 import { DisplayObject } from "pixi.js"
 import Viewport from "@lib/utils/Viewport"
-import { clamp } from "@lib/utils/math"
+import { aabb, clamp } from "@lib/utils/math"
+import { rectBounds } from "@lib/utils/entity"
 
 type Dims = { width: number, height: number }
 type Bounds = { x: number, y: number } & Dims
@@ -30,6 +31,15 @@ class Camera extends Node {
         const { x, y } = subject
         this.x = -clamp(0, world.width - bounds.width, x - bounds.width * .5)
         this.y = -clamp(0, world.height - bounds.height, y - bounds.height * 0.5)
+    }
+    intersects(node: Node) {
+        const dimensionless = typeof node.width !== "number" && typeof node.height !== "number"
+        if (node === this || dimensionless) {
+            // if the node is either the root or just a container (meaning it doesn't have explicit bounds) return true
+            return true
+        }
+        const intersects = aabb(node, this.bounds)
+        return intersects
     }
     update = () => {
         this.focus()
