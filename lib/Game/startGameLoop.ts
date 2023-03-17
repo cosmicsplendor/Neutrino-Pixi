@@ -30,7 +30,6 @@ const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 100 }: Params) => 
     let paused = false
 
     function loop(ts) {
-        // const dt = speed * Math.min(ts - lastUpdated, STEP) / 1000
         let dt = speed * Math.min(ts - lastUpdated, STEP)
         const tsInSecs = ts / 1000
         
