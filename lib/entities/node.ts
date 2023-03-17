@@ -1,4 +1,3 @@
-// import Observable from "@lib/utils/Observable";
 import { Constructor } from "@lib/utils/types";
 import { Container } from "pixi.js";
 

@@ -1,15 +1,15 @@
 type EasingFns = {
     [Key: string]: (x: number) => number
 }
-type Coords = {
+export type Coords = {
     x: number
     y: number
 }
-type RectBounds = Coords & {
+export type RectBounds = Coords & {
     width: number
     height: number
 }
-type CircBounds = Coords & {
+export type CircBounds = Coords & {
     radius: number
 }
 type PlankBounds = RectBounds & {

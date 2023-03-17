@@ -40,9 +40,6 @@ class Camera extends Node {
             return true
         }
         const intersects = aabb(rectBounds(node), this.bounds)
-        if (node instanceof Ball && !intersects) {
-            console.log(rectBounds(node))
-        }
         return intersects
     }
     update = () => {
