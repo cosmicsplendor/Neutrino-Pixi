@@ -7,8 +7,8 @@ type Params = {
     step?: number
 }
 export const updateRecursively = (node: Node, dt: number, t: number, rootNode: Node=node) => {
+    node.visible = rootNode instanceof Camera ? rootNode.intersects(node): true
     node.descendants.forEach(desc => {
-        node.visible = rootNode instanceof Camera ? rootNode.intersects(node): true
         if (typeof desc.update === "function") {
             desc.update(dt, t)
         }
@@ -20,7 +20,7 @@ export const updateRecursively = (node: Node, dt: number, t: number, rootNode: N
     })
 }
 
-const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 100 }: Params) => {
+const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 60 }: Params) => {
     const STEP = step // max frame duration
     const UPDATE_FPS = 60
     const UPDATE_INTERVAL= 1000 / UPDATE_FPS

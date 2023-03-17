@@ -249,12 +249,12 @@ export function setLocalPosY(node, globalPosY) {
     node.pos.y = localPosY
 }
 export function getGlobalPos(node) {
-    let x = node.pos.x
-    let y = node.pos.y
-    while (!!node.parent) {
-        node = node.parent
-        x += node.pos.x
-        y += node.pos.y
+    let x = node.x
+    let y = node.y
+    while (!!node.ancestor) {
+        node = node.ancestor
+        x += node.x
+        y += node.y
     }
     return getReusableCoords(x, y)
 }

@@ -3,14 +3,16 @@ import Game from "@lib/Game"
 import TexAtlasLocator from '@lib/service locators/TexAtlas'
 import { TexAtlas } from '@lib/entities/TexRegion'
 import { BaseTexture } from "pixi.js"
+import { AtlasData } from "@lib/entities/TexRegion"
 
 import { LEVEL } from "../names"
-import atlasData from "@assets/texAtlas/data"
-import atlasImg from "@assets/texAtlas/image.png"
+import atlasDataUri from "@assets/texAtlas/data.cson"
+import atlasImgUri from "@assets/texAtlas/image.png"
 
 type Param = { game: Game }
 const assets = [
-    atlasImg
+    atlasImgUri,
+    atlasDataUri
 ]
 class LoadingScreen extends GameScreen {
     game: Game
@@ -22,7 +24,10 @@ class LoadingScreen extends GameScreen {
         const { assetsCache } = this.game
         assetsCache.load(assets)
         assetsCache.once("load", () => {
-            TexAtlasLocator.register(new TexAtlas(assetsCache.get(atlasImg) as BaseTexture, atlasData))
+            const atlasBaseTex = assetsCache.get(atlasImgUri) as BaseTexture
+            const atlasData = assetsCache.get(atlasDataUri) as AtlasData
+            const texAtlas = new TexAtlas(atlasBaseTex, atlasData)
+            TexAtlasLocator.register(texAtlas)
             this.game.switchScreen(LEVEL)
         })
     }

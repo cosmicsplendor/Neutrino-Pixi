@@ -38,7 +38,7 @@ class Camera extends Node {
             // if the node is either the root or just a container (meaning it doesn't have explicit bounds) return true
             return true
         }
-        const intersects = aabb(node, this.bounds)
+        const intersects = aabb(rectBounds(node), this.bounds)
         return intersects
     }
     update = () => {
