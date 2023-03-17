@@ -2,7 +2,7 @@ import { Optional } from "@lib/utils/types"
 
 type AlphaKeys = "q" | "w" | "e" | "r" | "a" | "s" | "d" | "f" | "z" | "x" | "c" | "v"
 type MetaKeys = "control" | "shift" | "alt" | "escape" | "space" | "enter" | "tab"
-type ArrowKeys = "arrowleft" | "arrowtop" | "arrowright" | "arrowdown"
+type ArrowKeys = "arrowleft" | "arrowup" | "arrowright" | "arrowdown"
 
 type Key = AlphaKeys | MetaKeys | ArrowKeys
 type KeyState = { held: Boolean, pressed: Boolean }
@@ -43,7 +43,7 @@ class KeyControls {
         })
         document.addEventListener("keyup", e => {
             const key = parseKey(e.key)
-
+            
             if (key in this.keyStates) {
                 this.keyStates[key].pressed = false
                 this.keyStates[key].held = false

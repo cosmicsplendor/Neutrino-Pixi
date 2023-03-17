@@ -23,7 +23,7 @@ export const NodeMixin = function <TBase extends Constructor<Container>>(Base: T
     }
 }
 
-const Node = NodeMixin(Container)
+class Node extends NodeMixin(Container) {}
 
 // const node = new NodeClass()
 // const sprite = new SpriteClass()
