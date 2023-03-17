@@ -3,6 +3,7 @@ import { DisplayObject } from "pixi.js"
 import Viewport from "@lib/utils/Viewport"
 import { aabb, clamp } from "@lib/utils/math"
 import { rectBounds } from "@lib/utils/entity"
+import Ball from "@root/screens/Level/Ball"
 
 type Dims = { width: number, height: number }
 type Bounds = { x: number, y: number } & Dims
@@ -39,6 +40,9 @@ class Camera extends Node {
             return true
         }
         const intersects = aabb(rectBounds(node), this.bounds)
+        if (node instanceof Ball && !intersects) {
+            console.log(rectBounds(node))
+        }
         return intersects
     }
     update = () => {

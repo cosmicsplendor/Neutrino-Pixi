@@ -24,7 +24,6 @@ class Ball extends TexRegion {
         } else if(this.ctrls.get("down")) {
             this.y += 100 * dt
         }
-
         this.ctrls.resetPressed()
     }
 }

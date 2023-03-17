@@ -8,8 +8,9 @@ export const NodeMixin = function <TBase extends Constructor<Container>>(Base: T
         ancestor?: NodeClass
         update?: (dt: number, t: number) => void
         add(child: NodeClass) {
-            this.addChild(child as Container)
+            this.addChild(child)
             this.descendants.push(child)
+            child.ancestor = this
         }
         remove(child?: NodeClass) {
             if (child === undefined) {
