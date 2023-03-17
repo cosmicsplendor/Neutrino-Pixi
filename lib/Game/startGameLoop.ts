@@ -1,21 +1,25 @@
+import Camera from "@lib/entities/Camera"
+import Node from "@lib/entities/Node"
 import Game from "."
 type Params = {
     mainUpdateFn: (dt: number, t: number) => void,
     game: Game,
     step?: number
 }
-export const updateRecursively = (node, dt: number, t: number, rootNode=node) => {
+export const updateRecursively = (node: Node, dt: number, t: number, rootNode: Node=node) => {
     node.descendants.forEach(desc => {
-        node.visible = typeof rootNode.intersects === "function" ? rootNode.intersects(node): true
+        node.visible = rootNode instanceof Camera ? rootNode.intersects(node): true
         if (typeof desc.update === "function") {
             desc.update(dt, t)
         }
+        const isCamera = desc instanceof Camera
         const cachedChildren = node.descendants
         for (let i = 0, len = cachedChildren.length; i < len; i++) {
-            updateRecursively(cachedChildren[i], dt, t, rootNode)
+            updateRecursively(cachedChildren[i], dt, t, isCamera ? desc: rootNode)
         }
     })
 }
+
 const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 100 }: Params) => {
     const STEP = step // max frame duration
     const UPDATE_FPS = 60
@@ -32,9 +36,8 @@ const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 100 }: Params) => 
         
         if (paused) return requestAnimationFrame(loop)
 
-        // if root scene has update method that's where recursive update should go (it is useful when we have multiple cameras, one for each parallax layer)
         while (dt >= UPDATE_INTERVAL) {
-            game.activeScreen.update ? game.activeScreen.update(UPDATE_INTERVAL_SECS, tsInSecs) : updateRecursively(game.activeScreen, UPDATE_INTERVAL_SECS, tsInSecs, game.activeScreen)
+            updateRecursively(game.activeScreen, UPDATE_INTERVAL_SECS, tsInSecs, game.activeScreen)
             mainUpdateFn(UPDATE_INTERVAL_SECS, tsInSecs)
             dt -= UPDATE_INTERVAL
         }
