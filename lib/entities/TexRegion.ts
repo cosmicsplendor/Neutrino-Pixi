@@ -5,7 +5,6 @@ import { NodeMixin } from "./Node";
 export type AtlasFrameData = {
     x: number,
     y: number,
-    rotation?: number,
     width: number,
     height: number
 }
@@ -17,10 +16,9 @@ export class TexAtlas {
     private dict: Record<string, Texture> = { }
     constructor(private baseTex: BaseTexture, private data: AtlasData) {
         Object.entries(this.data).forEach(([ frameName, frameData ]) => {
-            const { x, y, width, height, rotation } = frameData
-            const dims = rotation === 90 ? [height, width]: [width, height]
+            const { x, y, width, height } = frameData
             const texture = new Texture(this.baseTex)
-            texture.frame = new Rectangle(x, y, dims[0], dims[1])
+            texture.frame = new Rectangle(x, y, width, height)
             this.dict[frameName] = texture
         })
     }
