@@ -50,6 +50,8 @@ class Game {
         this.activeScreen = this[screenName]
         this.activeScreen.onEnter(...params)
         this.app.stage = this.activeScreen
+        // @ts-ignore
+        this.app.renderer.background.color = Number(`0x${this.activeScreen.backgroundColor.slice(1)}`)
     }
     disposeScreen(screen) {
         this[screen.name] = null
