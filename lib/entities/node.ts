@@ -1,5 +1,6 @@
-import { Constructor } from "@lib/utils/types";
-import { Container } from "pixi.js";
+import { Constructor } from "@lib/utils/types"
+import { Container } from "pixi.js"
+import { isNull } from "@lib/utils/core"
 
 export const NodeMixin = function <TBase extends Constructor<Container>>(Base: TBase) {
     return class NodeClass extends Base {
@@ -10,15 +11,17 @@ export const NodeMixin = function <TBase extends Constructor<Container>>(Base: T
             this.addChild(child)
             this.descendants.push(child)
             child.ancestor = this
+            return this
         }
         remove(child?: NodeClass) {
-            if (child === undefined) {
+            if (isNull(child)) {
                 const remove = this.ancestor?.remove || this.parent?.removeChild
                 remove ?? remove(child)
                 return
             }
             this.removeChild(child)
             this.descendants = this.descendants.filter(dec => child !== dec)
+            return this
         }
     }
 }

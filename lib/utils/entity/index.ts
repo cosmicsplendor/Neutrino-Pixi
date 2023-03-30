@@ -2,7 +2,7 @@ import Node from "@lib/entities/Node"
 export { default as detectShape, shapes } from "./detectShape" 
 
 import { RectBounds, CircBounds } from "../math"
-type Entity = Node & { hitbox?: RectBounds, hitCirc?: CircBounds}
+type Entity = Node & { hitbox?: RectBounds, hitcirc?: CircBounds}
 
 export const  getReusableBounds = (() => {
     const bounds = [0, 0].map(() => ({ x: 0, y: 0, width: 0, height: 0 }))
@@ -38,7 +38,7 @@ export const getReusableCirc =(() => {
     }
 })()
 
-export function  calcCenter(entity) {
+export function  calcCenter(entity: Entity) {
     const { hitbox, hitcirc } = entity
 
     if (entity.hitbox) {
@@ -233,7 +233,7 @@ export function getHitbox(ent: Entity) {
 
 export function circBounds(ent: Entity) {
     const globalPos = getGlobalPos(ent)
-    return getReusableCirc(globalPos.x + ent.hitCirc.x, globalPos.y + ent.hitCirc.y, ent.hitCirc.radius)
+    return getReusableCirc(globalPos.x + ent.hitcirc.x, globalPos.y + ent.hitcirc.y, ent.hitcirc.radius)
 }
 
 export function setLocalPosX(node: Node, globalPosX: number) {

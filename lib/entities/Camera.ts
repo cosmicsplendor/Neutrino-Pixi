@@ -1,38 +1,49 @@
 import Node from "./Node"
-import { DisplayObject } from "pixi.js"
 import Viewport from "@lib/utils/Viewport"
 import { aabb, clamp } from "@lib/utils/math"
-import { rectBounds } from "@lib/utils/entity"
-import Ball from "@root/screens/Level/Ball"
+import { calcCenter, rectBounds } from "@lib/utils/entity"
+import { isNull, isObject } from "@lib/utils/core"
 
 type Dims = { width: number, height: number }
-type Bounds = { x: number, y: number } & Dims
-type Params = { subject: DisplayObject, world: Dims, viewport: Viewport, z: number }
+type Coords = { x: number, y: number }
+type Bounds = Coords & Dims
+type Params = { subject?: Node, world: Dims, viewport: Viewport, pFx?: number, pFy?: number }
 class Camera extends Node {
-    private subject: DisplayObject
+    name?: string
+    private subject?: Node
     private world: Dims
     private viewport: Viewport
-    private z: number
+    private pFx: number // pF for parallax factor
+    private pFy: number
     private bounds: Bounds 
-    constructor({ subject, world, viewport, z }: Params) {
+    private offset: Coords = { x: 0, y: 0 }
+    constructor({ subject, world, viewport, pFx=1, pFy=1 }: Params) {
         super()
-        this.subject = subject
         this.world = world
         this.viewport = viewport
-        this.bounds = { x: 0, y: 0, width: viewport.width, height: viewport.height }
-        this.z = z
+        this.bounds = { x: 0, y: 0, width: viewport.width -200, height: viewport.height }
+        this.pFx = pFx
+        this.pFy = pFy
+        this.setSubject(subject)
 
-        viewport.on("change", ({ width, height }) => {
+        this.viewport.on("change", ({ width, height }) => {
             this.bounds.width = width
             this.bounds.height = height
         })
     }
-    focus() {
-        const { subject, bounds, world } = this
-        const { x, y } = subject
-        this.x = -clamp(0, world.width - bounds.width, x - bounds.width * .5)
-        this.y = -clamp(0, world.height - bounds.height, y - bounds.height * 0.5)
+    setSubject(subject: Node, offset?: Coords) {
+        if (isNull(subject)) return
+        this.subject = subject
+        this.offset = isObject(offset) ? offset: calcCenter(subject)
+        this.focus()
     }
+    focus() {
+        const { subject, bounds, world, offset, pFx, pFy } = this
+        const { x, y } = subject
+        this.x = Math.round(-pFx * clamp(0, world.width - bounds.width, x + offset.x - bounds.width * .5))
+        this.y = Math.round(-pFy * clamp(0, world.height - bounds.height, y - offset.y - bounds.height * 0.5))
+    }
+    focusInst() { }
     intersects(node: Node) {
         const dimensionless = typeof node.width !== "number" && typeof node.height !== "number"
         if (node === this || dimensionless) {

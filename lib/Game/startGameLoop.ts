@@ -1,5 +1,6 @@
 import Camera from "@lib/entities/Camera"
 import Node from "@lib/entities/Node"
+import { Ticker } from "pixi.js"
 import Game from "."
 type Params = {
     mainUpdateFn: (dt: number, t: number) => void,
@@ -7,7 +8,7 @@ type Params = {
     step?: number
 }
 export const updateRecursively = (node: Node, dt: number, t: number, rootNode: Node=node) => {
-    node.visible = rootNode instanceof Camera ? rootNode.intersects(node): true
+    node.renderable = rootNode instanceof Camera ? rootNode.intersects(node): true
     node.descendants.forEach(desc => {
         if (typeof desc.update === "function") {
             desc.update(dt, t)
@@ -25,16 +26,20 @@ const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 60 }: Params) => {
     const UPDATE_FPS = 60
     const UPDATE_INTERVAL= 1000 / UPDATE_FPS
     const UPDATE_INTERVAL_SECS = UPDATE_INTERVAL / 1000
+    let ts = 0
     let lastUpdated = 0
     let speed = 1
     let paused = false
 
-    function loop(ts) {
+    const loop = (tickerTime) => {
+        ts += tickerTime * 1000
         let dt = speed * Math.min(ts - lastUpdated, STEP)
         const tsInSecs = ts / 1000
         
-        if (paused) return requestAnimationFrame(loop)
-
+        if (paused) {
+            // requestAnimationFrame(loop)
+            return
+        }
         while (dt >= UPDATE_INTERVAL) {
             updateRecursively(game.activeScreen, UPDATE_INTERVAL_SECS, tsInSecs, game.activeScreen)
             mainUpdateFn(UPDATE_INTERVAL_SECS, tsInSecs)
@@ -42,9 +47,10 @@ const startGameLoop = ({ mainUpdateFn= () => {}, game, step = 60 }: Params) => {
         }
 
         lastUpdated = ts - dt
-        requestAnimationFrame(loop)
+        // requestAnimationFrame(loop)
     }
-    requestAnimationFrame(loop)
+    // requestAnimationFrame(loop)
+    Ticker.shared.add(loop)
     return {
         pause() {
             paused = true

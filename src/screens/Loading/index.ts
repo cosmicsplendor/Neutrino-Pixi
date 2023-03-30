@@ -8,11 +8,13 @@ import { AtlasData } from "@lib/entities/TexRegion"
 import { LEVEL } from "../names"
 import atlasDataUri from "@assets/texAtlas/data.cson"
 import atlasImgUri from "@assets/texAtlas/image.png"
+import levelDataUri from "@assets/levels/level1.cson"
 
 type Param = { game: Game }
 const assets = [
     atlasImgUri,
-    atlasDataUri
+    atlasDataUri,
+    levelDataUri
 ]
 class LoadingScreen extends GameScreen {
     game: Game
@@ -23,10 +25,11 @@ class LoadingScreen extends GameScreen {
     onEnter() {
         const { assetsCache } = this.game
         assetsCache.load(assets)
-        assetsCache.once("load", () => {
+        assetsCache.once("load", async () => {
             const atlasBaseTex = assetsCache.get(atlasImgUri) as BaseTexture
             const atlasData = assetsCache.get(atlasDataUri) as AtlasData
             const texAtlas = new TexAtlas(atlasBaseTex, atlasData)
+            await texAtlas.init()
             TexAtlasLocator.register(texAtlas)
             this.game.switchScreen(LEVEL)
         })

@@ -4,7 +4,7 @@ import KeyControls from "@lib/Controls/KeyControls"
 class Ball extends TexRegion {
     ctrls: KeyControls
     constructor() {
-        super("crane")
+        super("ball")
         this.ctrls = new KeyControls({
             left: ["a", "arrowleft"],
             right: ["d", "arrowright"],
